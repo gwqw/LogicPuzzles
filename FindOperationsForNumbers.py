@@ -13,28 +13,27 @@
 
 op_str = ['+', '-', '*', '/', '']
 
-def select_n_any(obj_list, n, cur_idx):
+def select_n_any(obj_list, n):
     """
         select_n_any selects all combination of n objects from obj_list
         objects can repeat
-        cur_idx must be 0 (start of recursion)
     """
-    # TODO: make a wrapper for this function to eliminate cur_idx
     # recursion exit
-    if cur_idx+1 == n:
+    if n < 1: return []
+    if n == 1:
         res = [[o] for o in obj_list]
         return res
     # body
     res = []
     for o in obj_list:
-        lists = select_n_any(obj_list, n, cur_idx+1)
+        lists = select_n_any(obj_list, n-1)
         for l in lists:
             l.insert(0, o)
             res.append(l)
     return res
 
 def test_select_any():
-    s = select_n_any([1, 2, 3], 2, 0)
+    s = select_n_any([1, 2, 3], 2)
     #s = select_n_any(['+', '-', '*', '/', "><"], 4, 0)
     #print(s)
     assert([[1, 1], [1, 2], [1, 3],
@@ -62,7 +61,7 @@ def solve_equation(nums, res):
     """
         The solution to the puzzle in the start of the unit
     """
-    op_list = select_n_any(op_str, len(nums)-1, 0)
+    op_list = select_n_any(op_str, len(nums)-1)
     for op_set in op_list:
         res_str = check_op_set(op_set, nums, res)
         if res_str:
